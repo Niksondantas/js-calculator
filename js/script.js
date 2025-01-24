@@ -12,15 +12,84 @@ class Calculator{
 
     //Adiciona dígito na calculadora screen
     addDigit(digit){
+        //verifique se a operação atual já possui um ponto
+        if(digit === "." && this.currentOperationText.innerText.includes("."))
+            return 
 
         this.currentOperation = digit
         this.updateScreen()
     }
 
-    //Alterar valores da tela da calculadora
-    updateScreen(){
+    //processar todas as operações da calculadora
+    processOperation(operation){
+        //verifique se o valor atual está vazio
+        if(this.currentOperationText.innerText === ""){
+            //Mudar operação
+            if(this.previusOperationText.innerText !== ""){
+                this.changeOperation(operation)
+            }
+            return
+        }
 
-        this.currentOperationText.innerText += this.currentOperation
+        //obter o valor atual e anterior
+        let operationValue
+        let previous = +this.previusOperationText.innerText.split(" ")[0]
+        let current = +this.currentOperationText.innerText
+
+        switch(operation){
+            case "+":
+                operationValue = previous + current
+                this,this.updateScreen(operationValue, operation, current, previous)
+                break
+            case "-":
+                operationValue = previous - current
+                this,this.updateScreen(operationValue, operation, current, previous)
+                break
+            case "/":
+                operationValue = previous / current
+                this,this.updateScreen(operationValue, operation, current, previous)
+                break
+             case "*":
+                operationValue = previous * current
+                this,this.updateScreen(operationValue, operation, current, previous)
+                break
+            default:
+                return
+        }
+    }
+
+
+    //Alterar valores da tela da calculadora
+    updateScreen(
+        operationValue = null, 
+        operation = null, 
+        current = null, 
+        previous = null
+    ){
+
+        if(operationValue === null){
+            this.currentOperationText.innerText += this.currentOperation
+        }else{
+            //Checar se o valor for zero
+            if(previous === 0){
+                operationValue = current
+            }
+
+            //adicione o valor atual ao anterior
+            this.previusOperationText.innerText = `${operationValue} ${operation}`
+            this.currentOperationText.innerText = ""
+        }
+    }
+
+    //alterar operação matemática
+    changeOperation(operation){
+        const mathOperation = ["*", "/", "+", "-"]
+
+        if(!mathOperation.includes(operation)){
+            return
+        }
+
+        this.previusOperationText.innerText = this.previusOperationText.innerText.slice(0, -1) + operation;
     }
 }
 
@@ -33,7 +102,7 @@ buttons.forEach((btn)=>{
         if(+value >= 0 || value === "."){
             calc.addDigit(value)
         }else{
-
+            calc.processOperation(value)   
         }
     })
 })
