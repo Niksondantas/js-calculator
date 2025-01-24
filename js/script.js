@@ -23,7 +23,7 @@ class Calculator{
     //processar todas as operações da calculadora
     processOperation(operation){
         //verifique se o valor atual está vazio
-        if(this.currentOperationText.innerText === ""){
+        if(this.currentOperationText.innerText === "" && operation !== "C"){
             //Mudar operação
             if(this.previusOperationText.innerText !== ""){
                 this.changeOperation(operation)
@@ -39,19 +39,31 @@ class Calculator{
         switch(operation){
             case "+":
                 operationValue = previous + current
-                this,this.updateScreen(operationValue, operation, current, previous)
+                this.updateScreen(operationValue, operation, current, previous)
                 break
             case "-":
                 operationValue = previous - current
-                this,this.updateScreen(operationValue, operation, current, previous)
+                this.updateScreen(operationValue, operation, current, previous)
                 break
             case "/":
                 operationValue = previous / current
-                this,this.updateScreen(operationValue, operation, current, previous)
+                this.updateScreen(operationValue, operation, current, previous)
                 break
              case "*":
                 operationValue = previous * current
-                this,this.updateScreen(operationValue, operation, current, previous)
+                this.updateScreen(operationValue, operation, current, previous)
+                break
+            case "DEL":
+                this.processDelOperator()
+                break
+            case "CE":
+                this.processClearCurrentOperation()
+                break
+            case "C":
+                this.processClearOperation()
+                break
+                case "=":
+                this.processEqualOperator()
                 break
             default:
                 return
@@ -91,7 +103,26 @@ class Calculator{
 
         this.previusOperationText.innerText = this.previusOperationText.innerText.slice(0, -1) + operation;
     }
+    //exclui o último dígito
+    processDelOperator(){
+        this.currentOperationText.innerText = this.currentOperationText.innerText.slice(0, -1)
+    }
+    //Limpar operação atual
+    processClearCurrentOperation(){
+        this.currentOperationText.innerText = ""
+    }
+    //limpar todas as operações
+    processClearOperation(){
+        this.currentOperationText.innerText = ""
+        this.previusOperationText.innerText = ""
+    }
+    //Processar uma operação
+    processEqualOperator(){
+        const operation = previusOperationText.innerText.split(" ")[1]
+        this.processOperation(operation)
+    }
 }
+
 
 const calc = new Calculator(previusOperationText, currentOperationText)
 
